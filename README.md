@@ -14,7 +14,7 @@ pip install -r requirements.txt
 
 ## Training Demo
 ``` bash
-python mainACIDaddproj.py
+python mainPAILaddproj.py
 ```
 
 ## Test Demo

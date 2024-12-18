@@ -280,9 +280,9 @@ class IterBlock(nn.Module):
           
         return output1
 
-class ACID(nn.Module):
+class PAIL(nn.Module):
     def __init__(self, block_num, **kwargs):
-        super(ACID, self).__init__()
+        super(PAIL, self).__init__()
         views = kwargs['views']
         dets = kwargs['dets']
         width = kwargs['width']

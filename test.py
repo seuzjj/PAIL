@@ -9,7 +9,7 @@ import scipy.io as sio
 import torch
 import torch.nn as nn
 import torch.optim as optim
-import modelACIDaddproj
+import modelPAILaddproj
 
 from torch.utils.data import Dataset,DataLoader
 from torch.autograd import Variable
@@ -24,7 +24,7 @@ parser.add_argument("--batch_size", type=int, default=1, help="size of the batch
 parser.add_argument("--lr", type=float, default=2.5e-4, help="adam: learning rate")
 parser.add_argument("--n_block", type=int, default=10)#40
 parser.add_argument("--n_cpu", type=int, default=5)
-parser.add_argument("--model_save_path", type=str, default="saved_ACIDaddprojmodels/14th")
+parser.add_argument("--model_save_path", type=str, default="saved_PAILaddprojmodels/14th")
 parser.add_argument('--checkpoint_interval', type=int, default=5)
 opt = parser.parse_args()
 cuda = True if torch.cuda.is_available() else False
@@ -54,7 +54,7 @@ class testset_loader(Dataset):
 
 class net():
     def __init__(self):
-        self.model = modelACIDaddproj.ACID(opt.n_block, views=36, dets=880, width=imagesize, height=imagesize,
+        self.model = modelPAILaddproj.PAIL(opt.n_block, views=36, dets=880, width=imagesize, height=imagesize,
             dImg=0.009*2, Ang0=0, dDet=0.0011, dAng=2*3.14159/2200*40, s2r=5.3852, d2r=0, binshift=-0.0013,scale=1, scan_type=1)
         self.loss = nn.MSELoss()
         self.path = opt.model_save_path
@@ -74,20 +74,20 @@ class net():
             os.makedirs(self.path)
             self.initialize_weights()
         else:
-            model_list = glob.glob(self.path + '/ACIDmodel_epoch_*.pth')
+            model_list = glob.glob(self.path + '/PAILmodel_epoch_*.pth')
             if len(model_list) == 0:
                 self.initialize_weights()
             else:
                 last_epoch = 0
                 for model in model_list:
-                    epoch_num = int(re.findall(r'ACIDmodel_epoch_(-?[0-9]\d*).pth', model)[0])
+                    epoch_num = int(re.findall(r'PAILmodel_epoch_(-?[0-9]\d*).pth', model)[0])
                     if epoch_num > last_epoch:
                         last_epoch = epoch_num
                 self.start = last_epoch
                 self.model.load_state_dict(torch.load(
-                    '%s/ACIDmodel_epoch_%04d.pth' % (self.path, last_epoch)))
+                    '%s/PAILmodel_epoch_%04d.pth' % (self.path, last_epoch)))
                 print('Loaded model:',
-                    '%s/ACIDmodel_epoch_%04d.pth' % (self.path, last_epoch))
+                    '%s/PAILmodel_epoch_%04d.pth' % (self.path, last_epoch))
 
     def displaywin(self, img):
         img[img < 0] = 0
@@ -98,7 +98,7 @@ class net():
 
     def initialize_weights(self):
         for module in self.model.modules():
-            if isinstance(module, modelACIDaddproj.prj_module):
+            if isinstance(module, modelPAILaddproj.prj_module):
                 nn.init.normal_(module.weight, mean=0.05, std=0.01)
             if isinstance(module, nn.Conv2d):
                 nn.init.normal_(module.weight, mean=0, std=0.01)
