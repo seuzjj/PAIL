@@ -1,6 +1,6 @@
 # PAIL
 
-**Code for TIP paper**: Trustworthy Limited Data CT Reconstruction Using Progressive Artifact Image Learning
+**Code for paper**: Trustworthy Limited Data CT Reconstruction Using Progressive Artifact Image Learning
 
 **Authors**: Jianjia Zhang, Zirong Li, Jiayi Pan, Shaoyu Wang, and Weiwen Wu
 
